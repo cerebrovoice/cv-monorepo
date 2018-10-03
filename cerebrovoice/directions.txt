@@ -1,0 +1,70 @@
+##########################################
+#		Make the project directory		 #
+##########################################
+	`cd ~/Documents/MindUI`
+	`mkdir [mon][day]_2018_subvoc`
+	-OR-
+	`mkdir [mon][day]_2018_subvoc_no_voice`
+	For the remaining examples, let's say the
+		directory is 'aug06_2018_subvoc_no_voice'
+
+##########################################
+#			Start Recording				 #
+##########################################
+	Turn on audio interface
+	Start Audacity
+	Make sure 'Behringer 1820' is the recording device (default is BUILT-IN MICROPHONE)
+	Make sure the number of channels is 8 (default is STEREO)
+	Press Record
+
+##########################################
+#			Start Display Script		 #
+##########################################
+	NOTE: default 500ms display time, 50ms recording time
+	`cd ~/pygame`
+	Run `python flash.py ~/Documents/MindUI/aug06_2018_subvoc_no_voice/outputs.csv 500 50`
+	Hit [ENTER] 5 times to begin
+		PAUSE - [Q][Space][Numpad-Del]
+		STOP - [ESC]
+
+##########################################
+#		Save the project files			 #
+##########################################
+	Stop Audacity recording
+	Save the Project as `project` in `aug06_2018_subvoc_no_voice/audacity files/'
+	Audacity may give you a warning about saving as a project, ignore it and conntinue
+
+##########################################
+#				Export Audio			 #
+##########################################
+	In Audacity, scan channel 4 and find the first 'click' from the five [ENTER] button presses
+	Delete everything on all channels before the first click (Click-n-drag to select, CMD-X to cut)
+	Do `File > Export > Export Multiple`
+	Save to `aug06_2018_subvoc_no_voice/original_audio`
+	Answer 'Yes' if Audacity asks to generate the non-existant directory
+	Click 'Ok' 8 times, once for each channel
+	Save the project (CMD-S) and exit Audacity
+
+##########################################
+#			Process audio			 #
+##########################################
+	`cd ~/Documents/MindUI`
+	NOTE: The script's default downsample rate is 8000Hz
+	NOTE: The script automatically tries to figure out duration per sample if no time is provided
+	`python process_audio.py aug06_2018_subvoc_no_voice/`
+
+##########################################
+#	[Optional] Manually Check Audio		 #
+##########################################
+	`cd ~/Documents/MindUI`
+	`python check_audio.py aug06_2018_subvoc_no_voice/`
+
+##########################################
+#			Upload To Bucket			 #
+##########################################
+	NOTE: default bucket is gs://42robolab-subvocal
+	Upload one day using `python upload_audio.py aug06_2018_subvoc_no_voice`
+
+##########################################
+#				C'est fini!				 #
+##########################################
