@@ -2,8 +2,8 @@ import json
 import os
 import re
 import sys
-from cerebrovoice.helpers.helpers import run_command, timer
 
+from cerebrovoice.helpers.helpers import run_command, timer
 
 CREDENTIALS = "configuration.json"
 

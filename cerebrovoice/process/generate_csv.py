@@ -4,8 +4,10 @@
 # In[1]:
 
 import os
-import pandas as pd
 import re
+
+import pandas as pd
+
 from cerebrovoice.helpers.helpers import timer
 
 # In[2]:
