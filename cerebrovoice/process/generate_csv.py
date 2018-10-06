@@ -3,11 +3,10 @@
 
 # In[1]:
 
-
+import os
 import pandas as pd
-import os, re
-from cerebrovoice.helpers.helpers import *
-
+import re
+from cerebrovoice.helpers.helpers import timer
 
 # In[2]:
 
@@ -21,7 +20,7 @@ IMG_EXT = ".png"
 VERBOSITY = 100
 NUM_CHANNELS = 22
 CATS, MONTHS, DAYS, LABELS, SEQ, SETS = [], [], [], [], [], []
-for i in range(1, NUM_CHANNELS+1):
+for i in range(1, NUM_CHANNELS + 1):
     globals()["PATH{}".format(i)] = []
 
 
@@ -42,7 +41,7 @@ def make_df_from_images(image_root):
                 placeholder = os.path.join(label_path, "ch1")
                 for image in [f for f in os.listdir(placeholder) if f.endswith(IMG_EXT)]:
                     date_count += 1
-                    for i in range(1, NUM_CHANNELS+1):
+                    for i in range(1, NUM_CHANNELS + 1):
                         p = os.path.join(label_path, "ch{}".format(i), image)
                         if os.path.exists(p):
                             globals()["PATH{}".format(i)].append(p)
@@ -63,14 +62,14 @@ def make_df_from_images(image_root):
                         SETS.append("Testing")
             print("\t\tProcessed {} sequences".format(date_count))
     d = {
-            "Category":CATS,
-            "Day":DAYS,
-            "Month":MONTHS,
-            "Label":LABELS,
-            "SequenceNumber":SEQ,
-            "Set":SETS
-        }
-    for i in range(1, NUM_CHANNELS+1):
+        "Category": CATS,
+        "Day": DAYS,
+        "Month": MONTHS,
+        "Label": LABELS,
+        "SequenceNumber": SEQ,
+        "Set": SETS
+    }
+    for i in range(1, NUM_CHANNELS + 1):
         d["Path{}".format(i)] = globals()["PATH{}".format(i)]
     return pd.DataFrame(d)
 

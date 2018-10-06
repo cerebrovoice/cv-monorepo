@@ -1,15 +1,15 @@
-
 # coding: utf-8
 
-import os, shutil, re
-from cerebrovoice.helpers.helpers import *
-import numpy as np
-import matplotlib.pyplot as plt
-from scipy import signal
-from scipy.io import wavfile
 import librosa
 import librosa.display
-#get_ipython().run_line_magic('matplotlib', 'inline')
+import matplotlib.pyplot as plt
+import numpy as np
+import os
+import re
+from cerebrovoice.helpers.helpers import curr_time, timer
+from scipy.io import wavfile
+
+# get_ipython().run_line_magic('matplotlib', 'inline')
 
 
 # replace this with your root directory
@@ -30,7 +30,7 @@ Expected directory structure:
 -------------------- [wave files] *.wav
 """
 
-VALID_LABELS = ["yes", "no", "stop", "go", "right", "left", "down", "up", "on", "off","test"]
+VALID_LABELS = ["yes", "no", "stop", "go", "right", "left", "down", "up", "on", "off", "test"]
 IMG_EXT = ".png"
 VERBOSITY = 1000
 
@@ -45,6 +45,7 @@ def preprocess(samples, sample_rate, multiplier=1):
     padded[:samples.shape[0]] = samples
     return padded
 
+
 def make_dir(path):
     if not os.path.isdir(path):
         os.mkdir(path)
@@ -57,7 +58,7 @@ def process(input_dir, output_dir, overwrite=False):
     items = 0
     created = 0
     found = 0
-    date_mult = {"08_08":2, "08_11":2, "08_14":2}
+    date_mult = {"08_08": 2, "08_11": 2, "08_14": 2}
     plt.ioff()
     for date in [x for x in os.listdir(input_dir) if re.match(pattern, x)]:
         multiplier = 1
@@ -80,7 +81,6 @@ def process(input_dir, output_dir, overwrite=False):
                 channel_path = os.path.join(label_path, channel)
                 o_channel_path = os.path.join(o_label_path, channel)
                 make_dir(o_channel_path)
-                channel_num = channel[-1]
                 for file in [f for f in os.listdir(channel_path) if f.endswith(".wav")]:
                     items += 1
                     wavpath = os.path.join(channel_path, file)
@@ -91,18 +91,18 @@ def process(input_dir, output_dir, overwrite=False):
                             print("\t\tCreated {}th image".format(items))
                         sample_rate, samples = wavfile.read(wavpath)
                         samples = preprocess(samples, sample_rate, multiplier)
-#                         freqs, times, spectrogram = signal.spectrogram(samples, sample_rate)
+                        # freqs, times, spectrogram = signal.spectrogram(samples, sample_rate)
                         if voice:
-                            S = librosa.feature.melspectrogram(samples, sr=sample_rate, n_mels=128)
+                            s = librosa.feature.melspectrogram(samples, sr=sample_rate, n_mels=128)
                         else:
-                            S = librosa.feature.melspectrogram(samples, sr=sample_rate, n_mels=128, fmax=512)
-                        log_S = librosa.power_to_db(S, ref=np.max)
+                            s = librosa.feature.melspectrogram(samples, sr=sample_rate, n_mels=128, fmax=512)
+                        log_s = librosa.power_to_db(s, ref=np.max)
                         fig = plt.figure(figsize=(1.28, 1.28), dpi=100, frameon=False)
                         ax = plt.Axes(fig, [0., 0., 1., 1.])
                         ax.set_axis_off()
                         fig.add_axes(ax)
                         plt.axis('off')
-                        librosa.display.specshow(log_S)                          
+                        librosa.display.specshow(log_s)
                         plt.savefig(imgpath)
                         plt.close()
                     else:
@@ -117,10 +117,9 @@ def process(input_dir, output_dir, overwrite=False):
 
 
 dir_pairs = {
-    ROOT+"voice":IMG_ROOT+"voice",
-    ROOT+"no_voice":IMG_ROOT+"no_voice"
+    ROOT + "voice": IMG_ROOT + "voice",
+    ROOT + "no_voice": IMG_ROOT + "no_voice"
 }
-
 
 # In[6]:
 
@@ -131,4 +130,4 @@ for input_dir in dir_pairs:
         os.mkdir(output_dir)
     timer(process, input_dir, output_dir)
 
-print("#"* 21 + "  CREATED SPECTROGRAMS  " + "#" * 21)
+print("#" * 21 + "  CREATED SPECTROGRAMS  " + "#" * 21)
