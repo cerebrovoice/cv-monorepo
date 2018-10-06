@@ -1,12 +1,12 @@
 import argparse
 import json
 import os
-import pygame
 from collections import deque
 from datetime import datetime
 from random import choice, sample
 from time import time
 
+import pygame
 
 # PYGAME SETUP
 pygame.init()

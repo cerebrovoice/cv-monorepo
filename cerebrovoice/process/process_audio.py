@@ -1,10 +1,12 @@
 import os
-import pandas as pd
 import shutil
 import sys
 import threading
+from multiprocessing import Lock, Queue, Value
+
+import pandas as pd
+
 from cerebrovoice.helpers.helpers import ms_to_strtime, progress_bar, run_command, timer
-from multiprocessing import Queue, Value, Lock
 
 VERBOSITY = 100
 PER_WORD_DURATION = 1000  # ms

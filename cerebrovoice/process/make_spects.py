@@ -1,13 +1,15 @@
 # coding: utf-8
 
+import os
+import re
+
 import librosa
 import librosa.display
 import matplotlib.pyplot as plt
 import numpy as np
-import os
-import re
-from cerebrovoice.helpers.helpers import curr_time, timer
 from scipy.io import wavfile
+
+from cerebrovoice.helpers.helpers import curr_time, timer
 
 # get_ipython().run_line_magic('matplotlib', 'inline')
 
